@@ -22,4 +22,4 @@ This is a simple command-line image processing program that allows users to perf
 
 #### Author:
 
-[Sara Yasser], [put your name there]
+[Sara Yasser],[Bassant Ahmed],[put your name there]
