@@ -6,7 +6,7 @@
 using namespace std;
 
 // Function prototypes
-bool fileExists(const string& filename);
+bool doesFileExist(const string& filename);
 bool handleExtensionError(string& filename);
 void flipHorizontal(unsigned char* imageData, int width, int height, int channels);
 void flipVertical(unsigned char* imageData, int width, int height, int channels);
@@ -37,7 +37,7 @@ int main() {
                     continue;
                 }
 
-                if (!fileExists(filename)) {
+                if (!doesFileExist(filename)) {
                     cout << "\n**File '" << filename << "' does not exist. Please enter a valid filename**\n";
                 } else {
                     image.loadNewImage(filename);
@@ -131,7 +131,7 @@ int main() {
 }
 
 // checks for file existence
-bool fileExists(const string& filename) {
+bool doesFileExist(const string& filename) {
     ifstream file(filename);
     return file.good();
 }
