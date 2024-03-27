@@ -12,6 +12,7 @@ void flipHorizontal(unsigned char* imageData, int width, int height, int channel
 void flipVertical(unsigned char* imageData, int width, int height, int channels);
 void blackAndWhite(Image& image);
 void invert(Image& image);
+void GrayscaleConversion(Image& image);
 
 int main() {
     string filename;
@@ -47,6 +48,14 @@ int main() {
                     imageLoaded = true; // Set flag to true indicating image is loaded
                     break;
                 }
+            }
+
+        } else if (choice == 2) {
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                GrayscaleConversion(image);
+                cout << "\nGray Scale filter applied!!\n";
             }
 
         } else if (choice == 3) {
@@ -163,35 +172,19 @@ bool handleExtensionError(string& filename) {
     return true;
 }
 
-// Function to flip the image horizontally
-void flipHorizontal(unsigned char* imageData, int width, int height, int channels) {
-    unsigned char temp;
-    // Iterate over each row of the image
-    for (int row = 0; row < height; ++row) {
-        // Iterate over each column up to the middle of the image width
-        for (int column = 0; column < width / 2; ++column) {
-            // Swap corresponding pixels from left and right sides of the image
-            for (int c = 0; c < channels; ++c) {
-                temp = imageData[(row * width + column) * channels + c];
-                imageData[(row * width + column) * channels + c] = imageData[(row * width + (width - 1 - column)) * channels + c];
-                imageData[(row * width + (width - 1 - column)) * channels + c] = temp;
-            }
-        }
-    }
-}
 
-// Function to flip the image vertically
-void flipVertical(unsigned char* imageData, int width, int height, int channels) {
-    unsigned char temp;
-    // Iterate over each row up to the middle of the image height
-    for (int row = 0; row < height / 2; ++row) {
-        // Iterate over each column of the image
-        for (int column = 0; column < width; ++column) {
-            // Swap corresponding pixels from top and bottom sides of the image
-            for (int c = 0; c < channels; ++c) {
-                temp = imageData[(row * width + column) * channels + c];
-                imageData[(row * width + column) * channels + c] = imageData[((height - 1 - row) * width + column) * channels + c];
-                imageData[((height - 1 - row) * width + column) * channels + c] = temp;
+// Function to apply the gray scale filter to the image
+void GrayscaleConversion(Image& image){
+    // Iterate over each pixel in the image
+    for (int i = 0; i < image.width; i++){
+        for (int k = 0; k < image.height; k++){
+            unsigned int average = 0;
+            for (int j = 0; j < image.channels; j++){
+                average += image(i,k,j);
+            }
+            // Get average (RGB channels) values for each pixel
+            for (int j = 0; j < image.channels; j++){
+                image(i,k,j) = average/3;
             }
         }
     }
@@ -229,6 +222,40 @@ void invert(Image& image) {
             // Iterate over each color channel (RGB channels)
             for(int k = 0; k < 3; ++k) {
                 image(i, j, k) = 255 - image(i, j, k);
+            }
+        }
+    }
+}
+
+// Function to flip the image horizontally
+void flipHorizontal(unsigned char* imageData, int width, int height, int channels) {
+    unsigned char temp;
+    // Iterate over each row of the image
+    for (int row = 0; row < height; ++row) {
+        // Iterate over each column up to the middle of the image width
+        for (int column = 0; column < width / 2; ++column) {
+            // Swap corresponding pixels from left and right sides of the image
+            for (int c = 0; c < channels; ++c) {
+                temp = imageData[(row * width + column) * channels + c];
+                imageData[(row * width + column) * channels + c] = imageData[(row * width + (width - 1 - column)) * channels + c];
+                imageData[(row * width + (width - 1 - column)) * channels + c] = temp;
+            }
+        }
+    }
+}
+
+// Function to flip the image vertically
+void flipVertical(unsigned char* imageData, int width, int height, int channels) {
+    unsigned char temp;
+    // Iterate over each row up to the middle of the image height
+    for (int row = 0; row < height / 2; ++row) {
+        // Iterate over each column of the image
+        for (int column = 0; column < width; ++column) {
+            // Swap corresponding pixels from top and bottom sides of the image
+            for (int c = 0; c < channels; ++c) {
+                temp = imageData[(row * width + column) * channels + c];
+                imageData[(row * width + column) * channels + c] = imageData[((height - 1 - row) * width + column) * channels + c];
+                imageData[((height - 1 - row) * width + column) * channels + c] = temp;
             }
         }
     }
