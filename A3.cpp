@@ -7,6 +7,7 @@ using namespace std;
 
 // Function prototypes
 bool fileExists(const string& filename);
+bool handleExtensionError(string& filename);
 void flipHorizontal(unsigned char* imageData, int width, int height, int channels);
 void flipVertical(unsigned char* imageData, int width, int height, int channels);
 void blackAndWhite(Image& image);
@@ -32,6 +33,10 @@ int main() {
                 cout << "\nPlease enter the name of the colored image file with extension: ";
                 cin >> filename;
 
+                if (!handleExtensionError(filename)) {
+                    continue;
+                }
+
                 if (!fileExists(filename)) {
                     cout << "\n**File '" << filename << "' does not exist. Please enter a valid filename**\n";
                 } else {
@@ -41,6 +46,8 @@ int main() {
                     break;
                 }
             }
+
+
         } else if (choice == 2) {
             // Flip option
             if (!imageLoaded) {
@@ -95,11 +102,18 @@ int main() {
                         cout << "\nImage saved as " << filename << "!!\n";
                         break;
                     } else if (saveOption == 2) {
-                        cout << "\nEnter the new image name: ";
-                        cin >> filename;
-                        image.saveImage(filename);
-                        cout << "\nImage saved as " << filename << "!!\n";
-                        break;
+                        while(true) {
+                            cout << "\nEnter the new image name: ";
+                            cin >> filename;
+                            if (!handleExtensionError(filename)) {
+                                continue;
+                            }
+                            // Save the image
+                            image.saveImage(filename);
+                            cout << "\nImage saved as " << filename << "!!\n";
+                            break;
+                    }
+                    break;
                     } else {
                         cout << "\n**Invalid choice. Please enter '1' or '2'**\n";
                     }
@@ -120,6 +134,22 @@ int main() {
 bool fileExists(const string& filename) {
     ifstream file(filename);
     return file.good();
+}
+
+bool handleExtensionError(string& filename) {
+    // Check if the filename has an extension
+    size_t dotPosition = filename.find_last_of(".");
+    if (dotPosition == string::npos) {
+        cout << "\n**File extension not found. Please include the file extension (e.g., .png, .jpg) in the filename**\n";
+        return false;
+    }
+    string extension = filename.substr(dotPosition);
+    // Check if the extension is supported
+    if (extension != ".jpg" && extension != ".jpeg" && extension != ".bmp" && extension != ".png" && extension != ".tga") {
+        cout << "\n**Unsupported file extension. Please use .jpg, .jpeg, .bmp, .png or .tga**\n";
+        return false;
+    }
+    return true;
 }
 
 // Function to flip the image horizontally
