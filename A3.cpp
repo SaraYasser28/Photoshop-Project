@@ -21,7 +21,8 @@ int main() {
     // Menu
     while (true) {
         cout << "\nMenu:\n";
-        cout << "\n1) Load Image\n2) Flip Image\n3) Apply Black and White Filter\n4) Invert Filter\n5) Save Image\n6)Exit\n";
+        cout << "\n1) Load a new image\n2) Filter 1: Gray Scale Conversion\n3) Filter 2: Black And White\n4) Filter 3: Invert Image";
+        cout << "\n5) Filter 4: Merge Images\n6) Filter 5: Flip Image\n7) Save Image\n8)Exit\n";
         cout << "\nEnter your choice: ";
 
         int choice;
@@ -48,8 +49,25 @@ int main() {
                 }
             }
 
+        } else if (choice == 3) {
+            // Black and white filter option
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                blackAndWhite(image);
+                cout << "\nBlack and white filter applied!!\n";
+            }
 
-        } else if (choice == 2) {
+        } else if (choice == 4) {
+            // Invert Filter option
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                invert(image);
+                cout << "\ninvert filter applied!!\n";
+            }
+
+        } else if (choice == 6) {
             // Flip option
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
@@ -77,23 +95,7 @@ int main() {
                     }
                 }
             }
-        } else if (choice == 3) {
-            // Black and white filter option
-            if (!imageLoaded) {
-                cout << "\n**Please load an image first**\n";
-            } else {
-                blackAndWhite(image);
-                cout << "\nBlack and white filter applied!!\n";
-            }
-        } else if (choice == 4) {
-            // Invert Filter option
-            if (!imageLoaded) {
-                cout << "\n**Please load an image first**\n";
-            } else {
-                invert(image);
-                cout << "\ninvert filter applied!!\n";
-            }
-        } else if (choice == 5) {
+        }  else if (choice == 7) {
             // Save image option
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
@@ -128,7 +130,7 @@ int main() {
                     }
                 }
             }
-        } else if (choice == 6) {
+        } else if (choice == 8) {
             cout << "\nExiting program ...\n";
             return 0;
         } else {
