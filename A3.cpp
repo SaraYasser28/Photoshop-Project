@@ -24,102 +24,92 @@ int main() {
 
         int choice;
         cin >> choice;
-
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-        switch (choice) {
-            case 1: {
-                while (true) {
-                    cout << "\nPlease enter the name of the colored image file with extension: ";
-                    cin >> filename;
+        if (choice == 1) {
+            while (true) {
+                cout << "\nPlease enter the name of the colored image file with extension: ";
+                cin >> filename;
 
-                    if (!fileExists(filename)) {
-                        cout << "\n**File '" << filename << "' does not exist. Please enter a valid filename**\n";
-                    } else {
-                        image.loadNewImage(filename);
-                        cout << "\nImage loaded successfully!!\n";
-                        imageLoaded = true; // Set flag to true indicating image is loaded
-                        break;
-                    }
-                }
-                break;
-            }
-            case 2: {
-                // Flip option
-                if (!imageLoaded) {
-                    cout << "\n**Please load an image first**\n";
+                if (!fileExists(filename)) {
+                    cout << "\n**File '" << filename << "' does not exist. Please enter a valid filename**\n";
+                } else {
+                    image.loadNewImage(filename);
+                    cout << "\nImage loaded successfully!!\n";
+                    imageLoaded = true; // Set flag to true indicating image is loaded
                     break;
                 }
+            }
+        } else if (choice == 2) {
+            // Flip option
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                while(true){
+                    cout << "\nFlip options:\n";
+                    cout << "\n1) Flip Horizontal\n";
+                    cout << "2) Flip Vertical\n";
+                    cout << "\nEnter your choice: ";
+                    int flipChoice;
+                    cin >> flipChoice;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                cout << "\nFlip options:\n";
-                cout << "\n1) Flip Horizontal\n";
-                cout << "2) Flip Vertical\n";
-                cout << "\nEnter your choice: ";
-                int flipChoice;
-                cin >> flipChoice;
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-                switch (flipChoice) {
-                    case 1:
+                    if (flipChoice == 1) {
                         flipHorizontal(image.imageData, image.width, image.height, image.channels);
                         cout << "\nImage flipped horizontally!!\n";
                         break;
-                    case 2:
+                    } else if (flipChoice == 2) {
                         flipVertical(image.imageData, image.width, image.height, image.channels);
                         cout << "\nImage flipped vertically!!\n";
                         break;
-                    default:
+                    } else {
                         cout << "\n**Invalid choice. Please enter '1' or '2'**\n";
+                    }
                 }
-                break;
             }
-            case 3: {
-                // Black and white filter option
-                if (!imageLoaded) {
-                    cout << "\n**Please load an image first**\n";
-                    break;
-                }
-
+        } else if (choice == 3) {
+            // Black and white filter option
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
                 blackAndWhite(image);
                 cout << "\nBlack and white filter applied!!\n";
-                break;
             }
-            case 4: {
-                // Save image option
-                if (!imageLoaded) {
-                    cout << "\n**Please load an image first**\n";
-                    break;
-                }
+        } else if (choice == 4) {
+            // Save image option
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                while(true){
+                    int saveOption;
+                    cout << "\n1) Save as " << filename << "\n2) Save as a new file\n";
+                    cout << "\nEnter your choice: ";
+                    cin >> saveOption;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                int saveOption;
-                cout << "\n1) Save as " << filename << "\n2) Save as a new file\n";
-                cout << "\nEnter your choice: ";
-                cin >> saveOption;
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                switch (saveOption)
-                {
-                case '1':
-                    image.saveImage(filename);
-                    cout << "\nImage saved as " << filename << "!!\n";
-                case '2':
-                    cout << "\nEnter the new image name: ";
-                    cin >> filename;
-                    image.saveImage(filename);
-                    cout << "\nImage saved as " << filename << "!!\n";
-                    break;
-                default:
-                    cout << "\n**Invalid choice. Please enter '1' or '2'**\n";
-                    break;
+                    if (saveOption == 1) {
+                        image.saveImage(filename);
+                        cout << "\nImage saved as " << filename << "!!\n";
+                        break;
+                    } else if (saveOption == 2) {
+                        cout << "\nEnter the new image name: ";
+                        cin >> filename;
+                        image.saveImage(filename);
+                        cout << "\nImage saved as " << filename << "!!\n";
+                        break;
+                    } else {
+                        cout << "\n**Invalid choice. Please enter '1' or '2'**\n";
+                    }
                 }
             }
-            case 5:
-                cout << "\nExiting program ...\n";
-                return 0;
-            default:
-                cout << "\n**Invalid choice. Please enter a valid option**\n";
+        } else if (choice == 5) {
+            cout << "\nExiting program ...\n";
+            return 0;
+        } else {
+            cout << "\n**Invalid choice. Please enter a valid option**\n";
         }
     }
 
