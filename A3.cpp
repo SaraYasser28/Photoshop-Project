@@ -1,3 +1,17 @@
+/*FCAI - Structured Programming - 2024 - Assignment 2
+Program Name: CS112_A3_Part1_7-8_20230168_20230094_20230792.cpp
+Program Description: This program includes 5 different filters
+with loading image (has to be in the same path) and option to save the image.
+Last Modification Date: 27/3/2024
+Author 1 and ID and Group: Sara Yasser Ahmed Meshrif - 20230168 - Group A
+Author 2 and ID and Group: Omar Nour Al-Deen Al-Masri - 20230792 - Group A
+Author 3 and ID and Group: Bassant Ahmed Talaat Mohammed - 20230094 - Group A
+Teaching Assistant: Belal Tarek Hassan
+Who did what: Sara Yasser did black and white filter - Bassant Ahmed did gray scale filter -
+Omar Nour did invert filter - Sara Yasser did flip image filter - bassant ahmed did merge images filter
+Sara Yasser did the base of the code and made doesFileExist and handleExtensionError functions*/
+
+
 #include <iostream>
 #include "Image_Class.h"
 #include <fstream>
