@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-// functions prototypes
+// Function prototypes
 bool fileExists(const string& filename);
 void flipHorizontal(unsigned char* imageData, int width, int height, int channels);
 void flipVertical(unsigned char* imageData, int width, int height, int channels);
@@ -12,23 +12,13 @@ void blackAndWhite(Image& image);
 
 int main() {
     string filename;
-    while (true) {
-        cout << "\nPlease enter the name of the colored image file with extension: ";
-        cin >> filename;
-
-        if (!fileExists(filename)) {
-            cout << "\n**File '" << filename << "' does not exist. Please enter a valid filename**\n";
-        } else {
-            break;
-        }
-    }
-
-    Image image(filename);
+    Image image;
+    bool imageLoaded = false;
 
     // Menu loop
     while (true) {
         cout << "\nMenu:\n";
-        cout << "\n1) Flip Image\n2) Apply Black and White Filter\n3) Save Image\n4) Exit\n";
+        cout << "\n1) Load Image\n2) Flip Image\n3) Apply Black and White Filter\n4) Save Image\n5) Exit\n";
         cout << "\nEnter your choice: ";
 
         int choice;
@@ -36,6 +26,27 @@ int main() {
 
         switch (choice) {
             case 1: {
+                while (true) {
+                    cout << "\nPlease enter the name of the colored image file with extension: ";
+                    cin >> filename;
+
+                    if (!fileExists(filename)) {
+                        cout << "\n**File '" << filename << "' does not exist. Please enter a valid filename**\n";
+                    } else {
+                        image.loadNewImage(filename);
+                        cout << "\nImage loaded successfully.\n";
+                        imageLoaded = true;
+                        break;
+                    }
+                }
+                break;
+            }
+            case 2: {
+                if (!imageLoaded) {
+                    cout << "\n**Please load an image first**\n";
+                    break;
+                }
+
                 cout << "\nFlip options:\n";
                 cout << "\n1) Flip Horizontal\n";
                 cout << "2) Flip Vertical\n";
@@ -45,25 +56,36 @@ int main() {
                 switch (flipChoice) {
                     case 1:
                         flipHorizontal(image.imageData, image.width, image.height, image.channels);
-                        cout << "\nImage flipped horizontally.\n";
+                        cout << "\nImage flipped horizontally!!\n";
                         break;
                     case 2:
                         flipVertical(image.imageData, image.width, image.height, image.channels);
-                        cout << "\nImage flipped vertically.\n";
+                        cout << "\nImage flipped vertically!!\n";
                         break;
                     default:
-                        cout << "\n**Invalid choice. Please enter '1' or '2'.**\n";
+                        cout << "\n**Invalid choice. Please enter '1' or '2'**\n";
                 }
                 break;
             }
-            case 2:
+            case 3: {
+                if (!imageLoaded) {
+                    cout << "\n**Please load an image first**\n";
+                    break;
+                }
+
                 blackAndWhite(image);
                 cout << "\nBlack and white filter applied!!\n";
                 break;
-            case 3: {
+            }
+            case 4: {
+                if (!imageLoaded) {
+                    cout << "\n**Please load an image first.**\n";
+                    break;
+                }
+
                 string saveOption;
-                cout << "\n1. Save as " << filename << "\n2. Save as a new file\n";
-                cout << "Enter your choice: ";
+                cout << "\n1) Save as " << filename << "\n2) Save as a new file\n";
+                cout << "\nEnter your choice: ";
                 cin >> saveOption;
 
                 if (saveOption == "1") {
@@ -75,22 +97,22 @@ int main() {
                     image.saveImage(filename);
                     cout << "\nImage saved as " << filename << ".\n";
                 } else {
-                    cout << "\n**Invalid choice. Please enter '1' or '2'.**\n";
+                    cout << "\n**Invalid choice. Please enter '1' or '2'**\n";
                 }
                 break;
             }
-            case 4:
+            case 5:
                 cout << "\nExiting program ...\n";
                 return 0;
             default:
-                cout << "\n**Invalid choice. Please enter a valid option.**\n";
+                cout << "\n**Invalid choice. Please enter a valid option**\n";
         }
     }
 
     return 0;
 }
 
-// checks for file
+// checks for file existence
 bool fileExists(const string& filename) {
     ifstream file(filename);
     return file.good();
@@ -124,8 +146,8 @@ void flipVertical(unsigned char* imageData, int width, int height, int channels)
     }
 }
 
-// black and white filter
-void blackAndWhite(Image& image){
+// Black and white filter
+void blackAndWhite(Image& image) {
     for (int i = 0; i < image.width; ++i) {
         for (int j = 0; j < image.height; ++j) {
             for(int k = 0; k < 3; ++k){
@@ -142,5 +164,4 @@ void blackAndWhite(Image& image){
             }
         }
     }
-
 }
