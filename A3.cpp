@@ -11,6 +11,7 @@ bool handleExtensionError(string& filename);
 void flipHorizontal(unsigned char* imageData, int width, int height, int channels);
 void flipVertical(unsigned char* imageData, int width, int height, int channels);
 void blackAndWhite(Image& image);
+void invert(Image& image);
 
 int main() {
     string filename;
@@ -20,7 +21,7 @@ int main() {
     // Menu
     while (true) {
         cout << "\nMenu:\n";
-        cout << "\n1) Load Image\n2) Flip Image\n3) Apply Black and White Filter\n4) Save Image\n5) Exit\n";
+        cout << "\n1) Load Image\n2) Flip Image\n3) Apply Black and White Filter\n4) Invert Filter\n5) Save Image\n6)Exit\n";
         cout << "\nEnter your choice: ";
 
         int choice;
@@ -85,6 +86,14 @@ int main() {
                 cout << "\nBlack and white filter applied!!\n";
             }
         } else if (choice == 4) {
+            // Invert Filter option
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                invert(image);
+                cout << "\ninvert filter applied!!\n";
+            }
+        } else if (choice == 5) {
             // Save image option
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
@@ -112,14 +121,14 @@ int main() {
                             image.saveImage(filename);
                             cout << "\nImage saved as " << filename << "!!\n";
                             break;
-                    }
-                    break;
+                        }
+                        break;
                     } else {
                         cout << "\n**Invalid choice. Please enter '1' or '2'**\n";
                     }
                 }
             }
-        } else if (choice == 5) {
+        } else if (choice == 6) {
             cout << "\nExiting program ...\n";
             return 0;
         } else {
@@ -199,12 +208,25 @@ void blackAndWhite(Image& image) {
                     image(i, j, 1) = 255;
                     image(i, j, 2) = 255;
                 }
-                // Otherwise, set it to black (0)
+                    // Otherwise, set it to black (0)
                 else{
                     image(i, j, 0) = 0;
                     image(i, j, 1) = 0;
                     image(i, j, 2) = 0;
                 }
+            }
+        }
+    }
+}
+
+// Function to apply the invert filter to the image
+void invert(Image& image) {
+    // Iterate over each pixel in the image
+    for(int i = 0; i < image.width; ++i) {
+        for(int j = 0; j < image.height; ++j) {
+            // Iterate over each color channel (RGB channels)
+            for(int k = 0; k < 3; ++k) {
+                image(i, j, k) = 255 - image(i, j, k);
             }
         }
     }
