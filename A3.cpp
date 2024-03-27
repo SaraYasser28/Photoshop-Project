@@ -20,6 +20,7 @@ Sara Yasser did the base of the code and made doesFileExist and handleExtensionE
 using namespace std;
 
 // Function prototypes
+
 bool doesFileExist(const string& filename);
 bool handleExtensionError(string& filename);
 void flipHorizontal(unsigned char* imageData, int width, int height, int channels);
@@ -27,9 +28,10 @@ void flipVertical(unsigned char* imageData, int width, int height, int channels)
 void blackAndWhite(Image& image);
 void invert(Image& image);
 void GrayscaleConversion(Image& image);
+void MergeImages(Image& image ,Image& image2);
 
 int main() {
-    string filename;
+    string filename , filename2;
     Image image;
     bool imageLoaded = false; // Flag to track if an image is loaded
 
@@ -88,6 +90,38 @@ int main() {
             } else {
                 invert(image);
                 cout << "\ninvert filter applied!!\n";
+            }
+
+        } else if (choice == 5) {
+            // Merge Images Filter option
+            Image image2;
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            }else{
+                while (true) {
+                    cout << "\nPlease enter the name of the colored image_2 file with extension: ";
+                    cin >> filename2;
+
+                    if (!handleExtensionError(filename2)) {
+                        continue;
+                    }
+
+                    if (!doesFileExist(filename2)) {
+                        cout << "\n**File '" << filename2 << "' does not exist. Please enter a valid filename**\n";
+                    } else {
+                        image2.loadNewImage(filename2);
+                        cout << "\nImage loaded successfully!!\n";
+                        imageLoaded = true; // Set flag to true indicating image is loaded
+                        break;
+                    }
+                }
+            
+                if (!imageLoaded) {
+                    cout << "\n**Please load an image first**\n";
+                } else {
+                    MergeImages(image , image2);
+                    cout << "\nMerge Images filter applied!!\n";
+                }
             }
 
         } else if (choice == 6) {
@@ -236,6 +270,20 @@ void invert(Image& image) {
             // Iterate over each color channel (RGB channels)
             for(int k = 0; k < 3; ++k) {
                 image(i, j, k) = 255 - image(i, j, k);
+            }
+        }
+    }
+}
+
+void MergeImages(Image& image ,Image& image2){
+    int MinWidth = min(image.width, image2.width);
+    int Minheight = min(image.height, image2.height);
+    Image Merge(MinWidth,Minheight);
+
+    for(int i = 0; i < Merge.width; i++){
+        for(int j = 0; j < Merge.height; j++){
+            for(int k = 0; k < Merge.channels; k++){
+                image(i,j,k) = (image(i,j,k) + image2(i,j,k)) /2;
             }
         }
     }
