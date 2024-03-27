@@ -10,9 +10,11 @@ This is a simple command-line image processing program that allows users to perf
 
 3. **Apply Black and White Filter**: Convert the loaded image to black and white.
 
-4. **Save Image**: Save the processed image with the same name or as a new file.
+4. **Invert Filter**: Make the negative version of the picture (invert colors).
+   
+5. **Save Image**: Save the processed image with the same name or as a new file.
 
-5. **Error Handling**: Proper error handling for invalid file names, missing extensions, unsupported extensions, and non-existent files.
+6. **Error Handling**: Proper error handling for invalid file names, missing extensions, unsupported extensions, and non-existent files.
 
 #### Notes:
 
@@ -22,4 +24,4 @@ This is a simple command-line image processing program that allows users to perf
 
 #### Author:
 
-[Sara Yasser],[Bassant Ahmed],[put your name there]
+[Sara Yasser],[Bassant Ahmed],[Omar Masri]
