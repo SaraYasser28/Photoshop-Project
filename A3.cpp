@@ -2,14 +2,18 @@
 Program Name: CS112_A3_Part1_7-8_20230168_20230094_20230792.cpp
 Program Description: This program includes 5 different filters
 with loading image (has to be in the same path) and option to save the image.
-Last Modification Date: 27/3/2024
+Last Modification Date: 13/4/2024
 Author 1 and ID and Group: Sara Yasser Ahmed Meshrif - 20230168 - S7
 Author 2 and ID and Group: Omar Nour Al-Deen Al-Masri - 20230792 - S8
 Author 3 and ID and Group: Bassant Ahmed Talaat Mohammed - 20230094 - S7
 Teaching Assistant: Belal Tarek Hassan
 Who did what: Sara Yasser did black and white filter - Bassant Ahmed did gray scale filter -
 Omar Nour did invert filter - Sara Yasser did flip image filter - bassant ahmed did merge images filter
-Sara Yasser did the base of the code and made doesFileExist and handleExtensionError functions*/
+Sara Yasser did the base of the code and made doesFileExist and handleExtensionError functions
+Sara Yasser did Resize Image filter - Sara Yasser did Crop Image filter - Sara Yasser did sunlight effect filter
+
+
+GitHub Link: https://github.com/SaraYasser28/Assignment-3*/
 
 
 #include <iostream>
@@ -17,10 +21,11 @@ Sara Yasser did the base of the code and made doesFileExist and handleExtensionE
 #include <fstream>
 #include <string>
 #include <limits>
+#include <cctype>
+#include <string>
 using namespace std;
 
 // Function prototypes
-
 bool doesFileExist(const string& filename);
 bool handleExtensionError(string& filename);
 void flipHorizontal(unsigned char* imageData, int width, int height, int channels);
@@ -29,9 +34,13 @@ void blackAndWhite(Image& image);
 void invert(Image& image);
 void GrayscaleConversion(Image& image);
 void MergeImages(Image& image ,Image& image2);
+void resizeImage(unsigned char* &imageData, int &width, int &height, int channels, int newWidth, int newHeight);
+void cropImage(Image& image, int startX, int startY, int cropWidth, int cropHeight);
+bool isValidInput(const string& input);
+void adjustSunlight(Image& image);
 
 int main() {
-    string filename , filename2;
+    string filename, filename2;
     Image image;
     bool imageLoaded = false; // Flag to track if an image is loaded
 
@@ -39,8 +48,10 @@ int main() {
     while (true) {
         cout << "\nMenu:\n";
         cout << "\n1) Load a new image\n2) Filter 1: Gray Scale Conversion\n3) Filter 2: Black And White\n4) Filter 3: Invert Image";
-        cout << "\n5) Filter 4: Merge Images\n6) Filter 5: Flip Image\n7) Save Image\n8)Exit\n";
-        cout << "\nEnter your choice: ";
+        cout << "\n5) Filter 4: Merge Images\n6) Filter 5: Flip Image\n7) Filter 6: \n8) Filter 7: ";
+        cout << "\n9) Filter 8: Resize Image\n10) Filter 9: \n11) Filter 10: \n12) Filter 11: Crop Image";
+        cout << "\n13) Filter 12: \n14) Filter 13: Sunlight Effect\n15) Filter 14: \n16) Filter 15: ";
+        cout << "\n17) Save Image\n18)Exit\n\nEnter your choice: ";
 
         int choice;
         cin >> choice;
@@ -50,7 +61,7 @@ int main() {
         if (choice == 1) {
             while (true) {
                 cout << "\nPlease enter the name of the colored image file with extension: ";
-                cin >> filename;
+                getline(cin, filename);
 
                 if (!handleExtensionError(filename)) {
                     continue;
@@ -92,7 +103,7 @@ int main() {
                 cout << "\ninvert filter applied!!\n";
             }
 
-        } else if (choice == 5) {
+         } else if (choice == 5) {
             // Merge Images Filter option
             Image image2;
             if (!imageLoaded) {
@@ -115,7 +126,7 @@ int main() {
                         break;
                     }
                 }
-            
+
                 if (!imageLoaded) {
                     cout << "\n**Please load an image first**\n";
                 } else {
@@ -152,7 +163,66 @@ int main() {
                     }
                 }
             }
-        }  else if (choice == 7) {
+        } else if (choice == 9){
+            // Resize Image option
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                unsigned char *imageData;
+                int newWidth, newHeight, width, height, channels;
+                string input;
+
+                // Get new width
+                do {
+                    cout << "Enter the new width for resizing: ";
+                    cin >> input;
+                } while (!isValidInput(input) || stoi(input) <= 0);
+
+                newWidth = stoi(input);
+
+                // Get new height
+                do {
+                    cout << "Enter the new height for resizing: ";
+                    cin >> input;
+                } while (!isValidInput(input) || stoi(input) <= 0);
+
+                newHeight = stoi(input);
+                resizeImage(image.imageData, image.width, image.height, image.channels, newWidth, newHeight);
+                cout << "\nResize Image filter applied!!\n";
+            }
+
+        }else if (choice == 12){
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                int startX, startY, cropWidth, cropHeight;
+                cout << "Enter the starting X coordinate for cropping: ";
+                cin >> startX;
+                cout << "Enter the starting Y coordinate for cropping: ";
+                cin >> startY;
+                cout << "Enter the width for cropping: ";
+                cin >> cropWidth;
+                cout << "Enter the height for cropping: ";
+                cin >> cropHeight;
+
+                if (startX < 0 || startY < 0 || cropWidth <= 0 || cropHeight <= 0 ||
+                    startX + cropWidth > image.width || startY + cropHeight > image.height) {
+                    cout << "Invalid cropping dimensions or starting point. Please ensure cropping area is within the bounds of the original image." << endl;
+                }
+
+                cropImage(image, startX, startY, cropWidth, cropHeight);
+                cout << "\nCrop Image filter applied!!\n";
+            }
+
+        }else if (choice == 14){
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                adjustSunlight(image);
+                cout << "\nSunlight effect filter applied!!\n";
+            }
+
+        }else if (choice == 17) {
             // Save image option
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
@@ -172,7 +242,7 @@ int main() {
                     } else if (saveOption == 2) {
                         while(true) {
                             cout << "\nEnter the new image name: ";
-                            cin >> filename;
+                            getline(cin, filename);
                             if (!handleExtensionError(filename)) {
                                 continue;
                             }
@@ -187,7 +257,7 @@ int main() {
                     }
                 }
             }
-        } else if (choice == 8) {
+        } else if (choice == 18) {
             cout << "\nExiting program ...\n";
             return 0;
         } else {
@@ -275,6 +345,7 @@ void invert(Image& image) {
     }
 }
 
+// Function to merge two images together
 void MergeImages(Image& image ,Image& image2){
     int MinWidth = min(image.width, image2.width);
     int Minheight = min(image.height, image2.height);
@@ -288,6 +359,7 @@ void MergeImages(Image& image ,Image& image2){
         }
     }
 }
+
 
 // Function to flip the image horizontally
 void flipHorizontal(unsigned char* imageData, int width, int height, int channels) {
@@ -322,3 +394,93 @@ void flipVertical(unsigned char* imageData, int width, int height, int channels)
         }
     }
 }
+
+void resizeImage(unsigned char* &imageData, int &width, int &height, int channels, int newWidth, int newHeight) {
+    // Allocate memory for the resized image data
+    unsigned char* resizedImageData = new unsigned char[newWidth * newHeight * channels];
+
+    // Calculate scaling factors
+    float scaleX = (float)width / newWidth;
+    float scaleY = (float)height / newHeight;
+
+    for (int y = 0; y < newHeight; ++y) {
+        for (int x = 0; x < newWidth; ++x) {
+            for (int c = 0; c < channels; ++c) {
+                int sourceX = (int)(x * scaleX);
+                int sourceY = (int)(y * scaleY);
+                // Clamp to the original image boundaries
+                sourceX = min(max(sourceX, 0), width - 1);
+                sourceY = min(max(sourceY, 0), height - 1);
+                // Copy pixel value from the original image to the resized image
+                resizedImageData[(y * newWidth + x) * channels + c] = imageData[(sourceY * width + sourceX) * channels + c];
+            }
+        }
+    }
+    // Free the memory allocated for the original image data
+    delete[] imageData;
+
+    // Update the image properties with the new dimensions and data
+    width = newWidth;
+    height = newHeight;
+    imageData = resizedImageData;
+}
+
+
+void cropImage(Image& image, int startX, int startY, int cropWidth, int cropHeight) {
+    unsigned char* croppedImageData = new unsigned char[cropWidth * cropHeight * image.channels];
+
+    for (int y = 0; y < cropHeight; ++y) {
+        for (int x = 0; x < cropWidth; ++x) {
+            for (int c = 0; c < image.channels; ++c) {
+                croppedImageData[(y * cropWidth + x) * image.channels + c] =
+                    image.imageData[((startY + y) * image.width + startX + x) * image.channels + c];
+            }
+        }
+    }
+
+    delete[] image.imageData;
+
+    image.width = cropWidth;
+    image.height = cropHeight;
+    image.imageData = croppedImageData;
+}
+
+
+bool isValidInput(const string& input) {
+    // Check if input is a positive integer
+    for (char c : input) {
+        if (!isdigit(c)) {
+            cout << "**Please enter a valid positive number**" << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+void adjustSunlight(Image& image) {
+    // Iterate over each pixel in the image
+    for (int y = 0; y < image.height; ++y) {
+        for (int x = 0; x < image.width; ++x) {
+            // Iterate over each color channel (RGB channels)
+            for (int c = 0; c < image.channels; ++c) {
+                // Adjust pixel value for warm sunlight effect
+                int newValue = image(x, y, c);
+
+                // Apply different adjustments to different channels
+                if (c == 0 || c == 1) { // Red and Green channels
+                    newValue += 40; // Increase red and green for warm sunlight effect
+                } else if (c == 2) { // Blue channel
+                    newValue -= 25; // Decrease blue for warm sunlight effect
+                }
+
+                // Ensure the pixel value remains within the range [0, 255]
+                newValue = max(0, min(255, newValue));
+
+                // Update the pixel value
+                image(x, y, c) = newValue;
+            }
+        }
+    }
+
+}
+
