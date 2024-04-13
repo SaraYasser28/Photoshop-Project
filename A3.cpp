@@ -7,10 +7,11 @@ Author 1 and ID and Group: Sara Yasser Ahmed Meshrif - 20230168 - S7
 Author 2 and ID and Group: Omar Nour Al-Deen Al-Masri - 20230792 - S8
 Author 3 and ID and Group: Bassant Ahmed Talaat Mohammed - 20230094 - S7
 Teaching Assistant: Belal Tarek Hassan
-Who did what: Sara Yasser did black and white filter - Bassant Ahmed did gray scale filter -
-Omar Nour did invert filter - Sara Yasser did flip image filter - bassant ahmed did merge images filter
+Who did what: Sara Yasser did black and white filter  -
+Omar Nour did invert filter - Sara Yasser did flip image filter -
 Sara Yasser did the base of the code and made doesFileExist and handleExtensionError functions
 Sara Yasser did Resize Image filter - Sara Yasser did Crop Image filter - Sara Yasser did sunlight effect filter
+Bassant Ahmed did : gray scale filter - merge images filter - Darken and Lighten Image - Detect Image Edges - Wano villagers TV image
 
 
 GitHub Link: https://github.com/SaraYasser28/Assignment-3*/
@@ -38,7 +39,9 @@ void resizeImage(unsigned char* &imageData, int &width, int &height, int channel
 void cropImage(Image& image, int startX, int startY, int cropWidth, int cropHeight);
 bool isValidInput(const string& input);
 void adjustSunlight(Image& image);
-
+void adjustLightness(Image& image, float factor);
+void TVImage(Image& image);
+ 
 int main() {
     string filename, filename2;
     Image image;
@@ -48,9 +51,9 @@ int main() {
     while (true) {
         cout << "\nMenu:\n";
         cout << "\n1) Load a new image\n2) Filter 1: Gray Scale Conversion\n3) Filter 2: Black And White\n4) Filter 3: Invert Image";
-        cout << "\n5) Filter 4: Merge Images\n6) Filter 5: Flip Image\n7) Filter 6: \n8) Filter 7: ";
-        cout << "\n9) Filter 8: Resize Image\n10) Filter 9: \n11) Filter 10: \n12) Filter 11: Crop Image";
-        cout << "\n13) Filter 12: \n14) Filter 13: Sunlight Effect\n15) Filter 14: \n16) Filter 15: ";
+        cout << "\n5) Filter 4: Merge Images\n6) Filter 5: Flip Image\n7) Filter 6: \n8) Filter 7: Darken and Lighten Image ";
+        cout << "\n9) Filter 8: Resize Image\n10) Filter 9: \n11) Filter 10: Detect Image Edges \n12) Filter 11: Crop Image";
+        cout << "\n13) Filter 12: \n14) Filter 13: Sunlight Effect\n15) Filter 14: \n16) Filter 15: Wano villagers TV image";
         cout << "\n17) Save Image\n18)Exit\n\nEnter your choice: ";
 
         int choice;
@@ -163,6 +166,28 @@ int main() {
                     }
                 }
             }
+        } else if (choice == 8){
+            // adjustLightness (Darken and Lighten Image)
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                while(true){
+                    int lighten;
+                    cout << "1)Darken\n2)Lighten\n";
+                    cout << "enter your choice: ";
+                    cin >> lighten;
+                    if (lighten == 1){
+                        adjustLightness(image, 0.5);
+                    }else if(lighten == 2){
+                        adjustLightness(image, 1.5);
+                    }else{
+                        cout << "\n**This is not valid**\n";
+                        continue;
+                    }
+                    cout << "\nAdjust Lightness Image filter applied!!\n";
+                    break;
+                }
+            }
         } else if (choice == 9){
             // Resize Image option
             if (!imageLoaded) {
@@ -221,7 +246,14 @@ int main() {
                 adjustSunlight(image);
                 cout << "\nSunlight effect filter applied!!\n";
             }
-
+        }else if (choice == 16) {
+            // TV image
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                TVImage(image);
+                cout << "\nTV Image effect filter applied!!\n";
+            }
         }else if (choice == 17) {
             // Save image option
             if (!imageLoaded) {
@@ -394,7 +426,20 @@ void flipVertical(unsigned char* imageData, int width, int height, int channels)
         }
     }
 }
+void adjustLightness(Image& image, float factor) {
+    // Iterate over each pixel in the image
+    for (int i = 0; i < image.width; i++) {
+        for (int k = 0; k < image.height; k++) {
+            for (int j = 0; j < image.channels; j++) {
+                // Get the original pixel value
+                unsigned char& pixelValue = image(i, k, j);
 
+                // Adjust the pixel value based on the factor
+                pixelValue = (unsigned char) min(255, max(0, (int)(pixelValue * factor)));
+            }
+        }
+    }
+}
 void resizeImage(unsigned char* &imageData, int &width, int &height, int channels, int newWidth, int newHeight) {
     // Allocate memory for the resized image data
     unsigned char* resizedImageData = new unsigned char[newWidth * newHeight * channels];
@@ -483,4 +528,15 @@ void adjustSunlight(Image& image) {
     }
 
 }
-
+void TVImage(Image& image) {
+    // i make a pixel gray and next pixel normal with colored //the same with all pixel
+    for(int i = 0; i < image.width; i++){
+        for(int j = 0; j < image.height; j++){
+            for(int k = 0; k < image.channels; k++){
+                image(i,j,k) = 124/2;
+            }
+            j++; 
+        }
+        i++;
+    }
+}
