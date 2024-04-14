@@ -34,13 +34,14 @@ void flipVertical(unsigned char* imageData, int width, int height, int channels)
 void blackAndWhite(Image& image);
 void invert(Image& image);
 void GrayscaleConversion(Image& image);
-void MergeImages(Image& image ,Image& image2);
+void MergeImages(Image& image ,Image& image2 ,int size);
 void resizeImage(unsigned char* &imageData, int &width, int &height, int channels, int newWidth, int newHeight);
 void cropImage(Image& image, int startX, int startY, int cropWidth, int cropHeight);
 bool isValidInput(const string& input);
 void adjustSunlight(Image& image);
 void adjustLightness(Image& image, float factor);
 void TVImage(Image& image);
+void DetectImageEdges(Image& image);
  
 int main() {
     string filename, filename2;
@@ -124,17 +125,29 @@ int main() {
                         cout << "\n**File '" << filename2 << "' does not exist. Please enter a valid filename**\n";
                     } else {
                         image2.loadNewImage(filename2);
-                        cout << "\nImage loaded successfully!!\n";
+                        cout << "\nImage loaded successfully!!\n\n";
                         imageLoaded = true; // Set flag to true indicating image is loaded
                         break;
                     }
                 }
-
                 if (!imageLoaded) {
                     cout << "\n**Please load an image first**\n";
                 } else {
-                    MergeImages(image , image2);
-                    cout << "\nMerge Images filter applied!!\n";
+                    while(true){
+                        int size;
+                        cout << "1) merge the common area\n2) resize the smaller image\n";
+                        cout << "Enter your choice: ";
+                        cin >> size;
+                        if (size == 1 || size == 2){
+                            MergeImages(image , image2 , size);
+                            cout << "\nMerge Images filter applied!!\n";
+                        }else{
+                            cout << "\n**This is not a valid**\n";
+                            continue;
+                        }
+                        break;
+                    }
+                    
                 }
             }
 
@@ -215,7 +228,15 @@ int main() {
                 resizeImage(image.imageData, image.width, image.height, image.channels, newWidth, newHeight);
                 cout << "\nResize Image filter applied!!\n";
             }
-
+                
+        }else if (choice == 11){
+            // Detect Image Edges
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                DetectImageEdges(image);
+                cout << "\nDetect Image Edges filter applied!!\n";
+            }
         }else if (choice == 12){
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
@@ -378,14 +399,22 @@ void invert(Image& image) {
 }
 
 // Function to merge two images together
-void MergeImages(Image& image ,Image& image2){
-    int MinWidth = min(image.width, image2.width);
-    int Minheight = min(image.height, image2.height);
-    Image Merge(MinWidth,Minheight);
+void MergeImages(Image& image ,Image& image2 ,int size){
+    int NewWidth, NewHeight;
+    if (size == 1){
+        NewWidth = min(image.width, image2.width);
+        NewHeight = min(image.height, image2.height);
+    }
+     if (size == 2){
+        NewWidth = max(image.width, image2.width);
+        NewHeight = max(image.height, image2.height);
+        resizeImage(image.imageData, image.width, image.height, image.channels, NewWidth,NewHeight);
+        resizeImage(image2.imageData, image2.width, image2.height, image.channels, NewWidth,NewHeight);
+    } 
 
-    for(int i = 0; i < Merge.width; i++){
-        for(int j = 0; j < Merge.height; j++){
-            for(int k = 0; k < Merge.channels; k++){
+    for(int i = 0; i < image.width; i++){
+        for(int j = 0; j < image.height; j++){
+            for(int k = 0; k < image.channels; k++){
                 image(i,j,k) = (image(i,j,k) + image2(i,j,k)) /2;
             }
         }
@@ -469,7 +498,27 @@ void resizeImage(unsigned char* &imageData, int &width, int &height, int channel
     height = newHeight;
     imageData = resizedImageData;
 }
-
+void DetectImageEdges(Image& image) {
+    for (int i = 0; i < image.width; i++){
+        for (int k = 0; k < image.height; k++){
+            unsigned int average = 0;
+            unsigned int average2 = 0;
+            for (int j = 0; j < image.channels; j++){
+                average += image(i , k , j);
+                average2 += image(i+1 , k , j);
+            }
+            if (average - average2 < 80 || average - average2 > -80 ){
+                for (int j = 0; j < image.channels; j++){
+                    image(i , k , j) = 225;
+                }
+            }else{
+                for (int j = 0; j < image.channels; j++){
+                    image(i , k , j) = 0;
+                }
+            }
+        }
+    }
+}
 
 void cropImage(Image& image, int startX, int startY, int cropWidth, int cropHeight) {
     unsigned char* croppedImageData = new unsigned char[cropWidth * cropHeight * image.channels];
