@@ -196,26 +196,27 @@ int main() {
                 cout << "1. Rotate 90 degrees" << endl;
                 cout << "2. Rotate 180 degrees" << endl;
                 cout << "3. Rotate 270 degrees" << endl;
-                cout << "4. Back to Main Menu" << endl;
                 cout << "Enter your choice: ";
                 int choice;
                 cin >> choice;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 switch (choice) {
                     case 1:
                         rotateImage90Degrees(image);
+                        cout << "\nRotate Image applied!!\n";
                         break;
                     case 2:
                         rotateImage180Degrees(image);
+                        cout << "\nRotate Image applied!!\n";
                         break;
-                    case 3:
+                    case 3:    
                         rotateImage270Degrees(image);
+                        cout << "\nRotate Image applied!!\n";
                         break;
-                    case 4:
-                        main();
-                    default:
-                        cout << "Invalid choice" << endl;
+                    default:    
+                        cout << "Invalid choice, Please Try Again" << endl;
                 }
-                cout << "\nRotate Image applied!!\n";
             }
         }
         else if (choice == 8){
@@ -279,19 +280,22 @@ int main() {
                 cout << "Enter your choice: ";
                 int choice;
                 cin >> choice;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 switch (choice) {
                     case 1:
                         addingFrameToThePicture(image);
+                        cout << "\nFrame added to the picture!!\n";
                         break;
                     case 2:
                         addingFancyFrameToThePicture(image);
+                        cout << "\nFrame added to the picture!!\n";
                         break;
                     case 3:
                         main();
                     default:
-                        cout << "Invalid choice" << endl;
+                        cout << "Invalid choice, Please Try Again" << endl;
                 }
-                cout << "\nFrame added to the picture!!\n";
             }
         }
         else if (choice == 11){
