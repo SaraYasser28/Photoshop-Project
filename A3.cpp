@@ -1,17 +1,17 @@
 /*FCAI - Structured Programming - 2024 - Assignment 2
-Program Name: CS112_A3_Part2B_7/8_20230168_20230094_20230792.cpp
+Program Name: CS112_A3_Part1_7-8_20230168_20230094_20230792.cpp
 Program Description: This program includes 5 different filters
 with loading image (has to be in the same path) and option to save the image.
-Last Modification Date: 14/4/2024
+Last Modification Date: 13/4/2024
 Author 1 and ID and Group: Sara Yasser Ahmed Meshrif - 20230168 - S7
 Author 2 and ID and Group: Omar Nour Al-Deen Al-Masri - 20230792 - S8
 Author 3 and ID and Group: Bassant Ahmed Talaat Mohammed - 20230094 - S7
 Teaching Assistant: Belal Tarek Hassan
-Who did what:
-Omar Nour did: invert filter -
-Sara Yasser did: black and white filter - flip image filter - Resize Image filter - Crop Image filter - sunlight effect filter
-also Sara Yasser did: the base of the code and made doesFileExist and handleExtensionError functions.
-Bassant Ahmed did: gray scale filter - merge images filter - Darken and Lighten Image - Detect Image Edges - Wano villagers TV image
+Who did what: Sara Yasser did black and white filter  -
+Sara Yasser did the base of the code and made doesFileExist and handleExtensionError functions
+Sara Yasser did Resize Image filter - Sara Yasser did Crop Image filter - Sara Yasser did sunlight effect filter - flip image filter
+Omar Nour did invert filter - Rotate Applying - Frame Adding - Blur Effect - Purple Conversion
+Bassant Ahmed did : gray scale filter - merge images filter - Darken and Lighten Image - Detect Image Edges - Wano villagers TV image
 
 
 GitHub Link: https://github.com/SaraYasser28/Assignment-3*/
@@ -42,7 +42,14 @@ void adjustSunlight(Image& image);
 void adjustLightness(Image& image, float factor);
 void TVImage(Image& image);
 void DetectImageEdges(Image& image);
-
+void rotateImage90Degrees(Image& image);
+void rotateImage180Degrees(Image& image);
+void rotateImage270Degrees(Image& image);
+void addingFrameToThePicture(Image& image);
+void addingFancyFrameToThePicture(Image& image);
+void purpleConversion(Image& image);
+void boxBlur(Image& image);
+ 
 int main() {
     string filename, filename2;
     Image image;
@@ -52,9 +59,9 @@ int main() {
     while (true) {
         cout << "\nMenu:\n";
         cout << "\n1) Load a new image\n2) Filter 1: Gray Scale Conversion\n3) Filter 2: Black And White\n4) Filter 3: Invert Image";
-        cout << "\n5) Filter 4: Merge Images\n6) Filter 5: Flip Image\n7) Filter 6: \n8) Filter 7: Darken and Lighten Image ";
-        cout << "\n9) Filter 8: Resize Image\n10) Filter 9: \n11) Filter 10: Detect Image Edges \n12) Filter 11: Crop Image";
-        cout << "\n13) Filter 12: \n14) Filter 13: Sunlight Effect\n15) Filter 14: \n16) Filter 15: Wano villagers TV image";
+        cout << "\n5) Filter 4: Merge Images\n6) Filter 5: Flip Image\n7) Filter 6: Rotate Applying \n8) Filter 7: Darken and Lighten Image ";
+        cout << "\n9) Filter 8: Resize Image\n10) Filter 9: Adding Frame To The Picture \n11) Filter 10: Detect Image Edges \n12) Filter 11: Crop Image";
+        cout << "\n13) Filter 12: Blur Effect \n14) Filter 13: Sunlight Effect\n15) Filter 14: Purple Conversion \n16) Filter 15: Wano villagers TV image";
         cout << "\n17) Save Image\n18)Exit\n\nEnter your choice: ";
 
         int choice;
@@ -80,8 +87,8 @@ int main() {
                     break;
                 }
             }
-
-        } else if (choice == 2) {
+        }
+        else if (choice == 2) {
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
             } else {
@@ -107,7 +114,7 @@ int main() {
                 cout << "\ninvert filter applied!!\n";
             }
 
-         } else if (choice == 5) {
+        } else if (choice == 5) {
             // Merge Images Filter option
             Image image2;
             if (!imageLoaded) {
@@ -147,7 +154,7 @@ int main() {
                         }
                         break;
                     }
-
+                    
                 }
             }
 
@@ -179,7 +186,39 @@ int main() {
                     }
                 }
             }
-        } else if (choice == 8){
+        }
+        else if (choice == 7){
+            // Rotate Options
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            }
+            else {
+                cout << "1. Rotate 90 degrees" << endl;
+                cout << "2. Rotate 180 degrees" << endl;
+                cout << "3. Rotate 270 degrees" << endl;
+                cout << "4. Back to Main Menu" << endl;
+                cout << "Enter your choice: ";
+                int choice;
+                cin >> choice;
+                switch (choice) {
+                    case 1:
+                        rotateImage90Degrees(image);
+                        break;
+                    case 2:
+                        rotateImage180Degrees(image);
+                        break;
+                    case 3:
+                        rotateImage270Degrees(image);
+                        break;
+                    case 4:
+                        main();
+                    default:
+                        cout << "Invalid choice" << endl;
+                }
+                cout << "\nRotate Image applied!!\n";
+            }
+        }
+        else if (choice == 8){
             // adjustLightness (Darken and Lighten Image)
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
@@ -228,8 +267,34 @@ int main() {
                 resizeImage(image.imageData, image.width, image.height, image.channels, newWidth, newHeight);
                 cout << "\nResize Image filter applied!!\n";
             }
-
-        }else if (choice == 11){
+        }
+        else if (choice == 10){
+            // Adding Frame To The Picture
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                cout << "1. Add a simple frame" << endl;
+                cout << "2. Add a fancy frame" << endl;
+                cout << "3. Back to Main Menu" << endl;
+                cout << "Enter your choice: ";
+                int choice;
+                cin >> choice;
+                switch (choice) {
+                    case 1:
+                        addingFrameToThePicture(image);
+                        break;
+                    case 2:
+                        addingFancyFrameToThePicture(image);
+                        break;
+                    case 3:
+                        main();
+                    default:
+                        cout << "Invalid choice" << endl;
+                }
+                cout << "\nFrame added to the picture!!\n";
+            }
+        }
+        else if (choice == 11){
             // Detect Image Edges
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
@@ -260,14 +325,34 @@ int main() {
                 cout << "\nCrop Image filter applied!!\n";
             }
 
-        }else if (choice == 14){
+        }
+        else if (choice == 13){
+            // Blur Effect
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                boxBlur(image);
+                cout << "\nBlur Effect filter applied!!\n";
+            }
+        }
+        else if (choice == 14){
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
             } else {
                 adjustSunlight(image);
                 cout << "\nSunlight effect filter applied!!\n";
             }
-        }else if (choice == 16) {
+        }
+        else if (choice == 15){
+            // purple conversion
+            if (!imageLoaded) {
+                cout << "\n**Please load an image first**\n";
+            } else {
+                purpleConversion(image);
+                cout << "\nPurple Conversion filter applied!!\n";
+            }
+        }
+        else if (choice == 16) {
             // TV image
             if (!imageLoaded) {
                 cout << "\n**Please load an image first**\n";
@@ -410,7 +495,7 @@ void MergeImages(Image& image ,Image& image2 ,int size){
         NewHeight = max(image.height, image2.height);
         resizeImage(image.imageData, image.width, image.height, image.channels, NewWidth,NewHeight);
         resizeImage(image2.imageData, image2.width, image2.height, image.channels, NewWidth,NewHeight);
-    }
+    } 
 
     for(int i = 0; i < image.width; i++){
         for(int j = 0; j < image.height; j++){
@@ -584,8 +669,124 @@ void TVImage(Image& image) {
             for(int k = 0; k < image.channels; k++){
                 image(i,j,k) = 124/2;
             }
-            j++;
+            j++; 
         }
         i++;
     }
+}
+
+void rotateImage90Degrees(Image& image) {
+    Image newImage(image.height, image.width); // Create a copy of the image
+    for(int i = 0; i < image.width; ++i) {
+        for(int j = 0; j < image.height; ++j) {
+            for(int k = 0; k < 3; ++k) {
+                newImage(image.height - 1 - j, i, k) = image(i, j, k);
+            }
+        }
+    }
+    image = newImage;
+}
+
+void rotateImage180Degrees(Image& image) {
+    Image newImage(image.width, image.height); // Create a copy of the image
+    for(int i = 0; i < image.width; ++i) {
+        for(int j = 0; j < image.height; ++j) {
+            for(int k = 0; k < 3; ++k) {
+                newImage(image.width - 1 - i, image.height - 1 - j, k) = image(i, j, k);
+            }
+        }
+    }
+    image = newImage;
+}
+
+void rotateImage270Degrees(Image& image) {
+    Image newImage(image.height, image.width); // Create a copy of the image
+    for(int i = 0; i < image.width; ++i) {
+        for(int j = 0; j < image.height; ++j) {
+            for(int k = 0; k < 3; ++k) {
+                newImage(j, image.width - 1 - i, k) = image(i, j, k);
+            }
+        }
+    }
+    image = newImage;
+}
+
+void addingFrameToThePicture(Image& image) {
+    int frameSize = 50;
+    // Iterate over each pixel in the image
+    for(int i = 0; i < image.width; ++i) {
+        for(int j = 0; j < image.height; ++j) {
+            // Check if the pixel is in the frame
+            if(i < frameSize || i >= image.width - frameSize || j < frameSize || j >= image.height - frameSize) {
+                // Set the color of the frame to blue
+                image(i, j, 0) = 13;    // Red channel
+                image(i, j, 1) = 119;    // Green channel
+                image(i, j, 2) = 255;  // Blue channel
+            }
+        }
+    }
+}
+
+void addingFancyFrameToThePicture(Image& image) {
+    int frameSize = 50;
+    // Iterate over each pixel in the image
+    for(int i = 0; i < image.width; ++i) {
+        for(int j = 0; j < image.height; ++j) {
+            // Check if the pixel is in the frame
+            if(i < frameSize || i >= image.width - frameSize || j < frameSize || j >= image.height - frameSize) {
+                // Set the color of the frame based on the position of the pixel
+                image(i, j, 0) = (i + j) % 256;    // Red channel
+                image(i, j, 1) = (2 * i + j) % 256;    // Green channel
+                image(i, j, 2) = (i + 2 * j) % 256;  // Blue channel
+            }
+        }
+    }
+}
+
+void purpleConversion(Image& image){
+    // Iterate over each pixel in the image
+    for (int i = 0; i < image.width; i++){
+        for (int k = 0; k < image.height; k++){
+            unsigned int average = 0;
+            // Calculate the average of RGB channels
+            for (int j = 0; j < image.channels; j++){
+                average += image(i,k,j);
+            }
+            // Set RGB values to create a subtle purple tint
+            unsigned int red = image(i,k,0) + average/8; // Add a fraction of average to the red channel
+            unsigned int blue = image(i,k,2) + average/8; // Add a fraction of average to the blue channel
+            // Ensure that the values do not exceed 255
+            image(i,k,0) = red > 255 ? 255 : red;
+            image(i,k,1) = image(i,k,1); // Keep the green channel unchanged
+            image(i,k,2) = blue > 255 ? 255 : blue;
+        }
+    }
+}
+
+void boxBlur(Image& image) {
+    // Create a copy of the image
+    Image newImage(image.width, image.height);
+    // Define the radius
+    int radius = 7;
+    // Iterate over each pixel in the image
+    for (int i = 0; i < image.width; i++) {
+        for (int j = 0; j < image.height; j++) {
+            // Iterate over each color channel (RGB channels)
+            for (int k = 0; k < 3; k++) {
+                // Calculate the average of the pixel and its neighbors
+                int sum = 0;
+                int count = 0;
+                for (int x = -radius; x <= radius; x++) {
+                    for (int y = -radius; y <= radius; y++) {
+                        if (i + x >= 0 && i + x < image.width && j + y >= 0 && j + y < image.height) {
+                            sum += image(i + x, j + y, k);
+                            count++;
+                        }
+                    }
+                }
+                newImage(i, j, k) = sum / count;
+            }
+        }
+    }
+    image = newImage;
 }
