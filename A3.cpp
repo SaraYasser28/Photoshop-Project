@@ -1,17 +1,17 @@
 /*FCAI - Structured Programming - 2024 - Assignment 2
-Program Name: CS112_A3_Part1_7-8_20230168_20230094_20230792.cpp
+Program Name: CS112_A3_Part2B_7/8_20230168_20230094_20230792.cpp
 Program Description: This program includes 5 different filters
 with loading image (has to be in the same path) and option to save the image.
-Last Modification Date: 13/4/2024
+Last Modification Date: 14/4/2024
 Author 1 and ID and Group: Sara Yasser Ahmed Meshrif - 20230168 - S7
 Author 2 and ID and Group: Omar Nour Al-Deen Al-Masri - 20230792 - S8
 Author 3 and ID and Group: Bassant Ahmed Talaat Mohammed - 20230094 - S7
 Teaching Assistant: Belal Tarek Hassan
-Who did what: Sara Yasser did black and white filter  -
-Omar Nour did invert filter - Sara Yasser did flip image filter -
-Sara Yasser did the base of the code and made doesFileExist and handleExtensionError functions
-Sara Yasser did Resize Image filter - Sara Yasser did Crop Image filter - Sara Yasser did sunlight effect filter
-Bassant Ahmed did : gray scale filter - merge images filter - Darken and Lighten Image - Detect Image Edges - Wano villagers TV image
+Who did what:
+Omar Nour did: invert filter -
+Sara Yasser did: black and white filter - flip image filter - Resize Image filter - Crop Image filter - sunlight effect filter
+also Sara Yasser did: the base of the code and made doesFileExist and handleExtensionError functions.
+Bassant Ahmed did: gray scale filter - merge images filter - Darken and Lighten Image - Detect Image Edges - Wano villagers TV image
 
 
 GitHub Link: https://github.com/SaraYasser28/Assignment-3*/
@@ -42,7 +42,7 @@ void adjustSunlight(Image& image);
 void adjustLightness(Image& image, float factor);
 void TVImage(Image& image);
 void DetectImageEdges(Image& image);
- 
+
 int main() {
     string filename, filename2;
     Image image;
@@ -147,7 +147,7 @@ int main() {
                         }
                         break;
                     }
-                    
+
                 }
             }
 
@@ -228,7 +228,7 @@ int main() {
                 resizeImage(image.imageData, image.width, image.height, image.channels, newWidth, newHeight);
                 cout << "\nResize Image filter applied!!\n";
             }
-                
+
         }else if (choice == 11){
             // Detect Image Edges
             if (!imageLoaded) {
@@ -410,7 +410,7 @@ void MergeImages(Image& image ,Image& image2 ,int size){
         NewHeight = max(image.height, image2.height);
         resizeImage(image.imageData, image.width, image.height, image.channels, NewWidth,NewHeight);
         resizeImage(image2.imageData, image2.width, image2.height, image.channels, NewWidth,NewHeight);
-    } 
+    }
 
     for(int i = 0; i < image.width; i++){
         for(int j = 0; j < image.height; j++){
@@ -584,7 +584,7 @@ void TVImage(Image& image) {
             for(int k = 0; k < image.channels; k++){
                 image(i,j,k) = 124/2;
             }
-            j++; 
+            j++;
         }
         i++;
     }
