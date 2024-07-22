@@ -12,7 +12,15 @@ This is a simple command-line image processing program that allows users to perf
 6. Resize Image Filter: Change the dimensions of the loaded image.
 7. Crop Image Filter: Select and crop a specific region from the loaded image.
 8. Sunlight Effect Filter: Apply a warm sunlight effect to the loaded image.
-   etc...
+9. Gray-Scale Conversion: Back to the 60s and 70s years.
+10. Darken and Lighten Image: You have 2 choices, Make the image Darker or make it Lighter.
+11. Rotate The Image: 3 choices, 90, 180, 270 Degrees.
+12. Adding Beautiful Frame: Want a simple one? Or a fancy one? The two choices are available, Have fun.
+13. Detect Image Edges.
+14. Blur Effect: It's good if you want to decrease the details of the Image smoothly.
+15. Purple Conversion: Imagine the world with purpler colors...hmmmm, I dont think it will be nice.
+16. Wano Villagers Tv Image.
+17. Save Image: You can save the image you applied the filter on it in its original name or by creating new one.
 
 Error Handling: Proper error handling for invalid file names, missing extensions, unsupported extensions, and non-existent files.
 
