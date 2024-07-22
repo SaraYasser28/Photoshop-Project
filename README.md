@@ -12,6 +12,7 @@ This is a simple command-line image processing program that allows users to perf
 6. Resize Image Filter: Change the dimensions of the loaded image.
 7. Crop Image Filter: Select and crop a specific region from the loaded image.
 8. Sunlight Effect Filter: Apply a warm sunlight effect to the loaded image.
+   etc...
 
 Error Handling: Proper error handling for invalid file names, missing extensions, unsupported extensions, and non-existent files.
 
